@@ -28,4 +28,13 @@ module.exports = {
   userDidSignificantEvent: function () {
     return RNAppirater.userDidSignificantEvent();
   },
-}
+  setCustomAlertTitle: function(title) {
+    return RNAppirater.setCustomAlertTitle(title);
+  },
+  setCustomAlertMessage: function(message) {
+    return RNAppirater.setCustomAlertMessage(message);
+  },
+  setCustomAlertRateButtonTitle: function(title) {
+    return RNAppirater.setCustomAlertRateButtonTitle(title);
+  },
+};
