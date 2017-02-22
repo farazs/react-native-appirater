@@ -210,7 +210,7 @@ public class RNAppiraterModule extends ReactContextBaseJavaModule {
   }
 
   private static void rateApp(ReactApplicationContext reactContext, final SharedPreferences.Editor editor) {
-    reactContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reactContext.getString(R.string.appirator_market_url), reactContext.getPackageName()))));
+    reactContext.getCurrentActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(reactContext.getString(R.string.appirator_market_url), reactContext.getPackageName()))));
     if (editor != null) {
       editor.putBoolean(PREF_RATE_CLICKED, true);
       editor.commit();
@@ -246,8 +246,8 @@ public class RNAppiraterModule extends ReactContextBaseJavaModule {
     rateButton.setText(rateButtonTitle);
     rateButton.setOnClickListener(new OnClickListener() {
       public void onClick(View v) {
-        rateApp(reactContext, editor);
         dialog.dismiss();
+        rateApp(reactContext, editor);
       }
     });
 
