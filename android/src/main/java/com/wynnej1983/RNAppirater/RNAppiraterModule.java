@@ -57,6 +57,7 @@ public class RNAppiraterModule extends ReactContextBaseJavaModule {
     daysUntilPrompt = reactContext.getResources().getInteger(R.integer.appirator_days_before_reminding);
     usesUntilPrompt = reactContext.getResources().getInteger(R.integer.appirator_launches_until_prompt);
     significantEventsUntilPrompt = reactContext.getResources().getInteger(R.integer.appirator_events_until_prompt);
+    timeBeforeReminding = reactContext.getResources().getInteger(R.integer.appirator_days_before_reminding);
     testMode = reactContext.getResources().getBoolean(R.bool.appirator_test_mode);
 
     String appName = getApplicationName(reactContext.getApplicationContext());
@@ -173,12 +174,12 @@ public class RNAppiraterModule extends ReactContextBaseJavaModule {
 
     // Wait at least n days or m events before opening
     if (launch_count >= usesUntilPrompt) {
-      long millisecondsToWait = reactContext.getResources().getInteger(R.integer.appirator_days_until_prompt) * 24 * 60 * 60 * 1000L;
+      long millisecondsToWait = daysUntilPrompt * 24 * 60 * 60 * 1000L;
       if (System.currentTimeMillis() >= (date_firstLaunch + millisecondsToWait) || event_count >= significantEventsUntilPrompt) {
         if(date_reminder_pressed == 0){
           showRateDialog(reactContext, editor);
         }else{
-          long remindMillisecondsToWait = daysUntilPrompt * 24 * 60 * 60 * 1000L;
+          long remindMillisecondsToWait = timeBeforeReminding * 24 * 60 * 60 * 1000L;
           if(System.currentTimeMillis() >= (remindMillisecondsToWait + date_reminder_pressed)){
             showRateDialog(reactContext, editor);
           }
@@ -199,8 +200,7 @@ public class RNAppiraterModule extends ReactContextBaseJavaModule {
 
   @TargetApi(Build.VERSION_CODES.GINGERBREAD)
   @ReactMethod
-  public static void userDidSignificantEvent() {
-    boolean testMode = reactContext.getResources().getBoolean(R.bool.appirator_test_mode);
+  public void userDidSignificantEvent() {
     SharedPreferences prefs = reactContext.getSharedPreferences(reactContext.getPackageName()+".appirater", 0);
     if(!testMode && (prefs.getBoolean(PREF_DONT_SHOW, false) || prefs.getBoolean(PREF_RATE_CLICKED, false))) {return;}
 
